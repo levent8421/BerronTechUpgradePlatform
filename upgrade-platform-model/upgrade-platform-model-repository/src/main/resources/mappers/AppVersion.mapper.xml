@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.berrontech.upgrade.repository.mapper.AppVersionMapper">
+    <sql id="columns">
+        av.id           as av_id,
+        av.app_id       as av_app_id,
+        av.publisher_id as av_publisher_id,
+        av.version_code as av_version_code,
+        av.version_name as av_version_name,
+        av.release_note as av_release_note,
+        av.description  as av_description,
+        av.filename     as av_filename,
+        av.state        as av_state,
+        av.create_time  as av_create_time,
+        av.update_time  as av_update_time,
+        av.deleted      as av_deleted
+    </sql>
+    <sql id="select">
+        select
+        <include refid="columns"/>
+        from t_app_version as av
+        where av.deleted = false
+    </sql>
+    <sql id="select_with_all">
+        select
+        <include refid="columns"/>,
+        <include refid="com.berrontech.upgrade.repository.mapper.AppPackageMapper.columns"/>,
+        <include refid="com.berrontech.upgrade.repository.mapper.UserMapper.columns"/>
+        from t_app_version as av left outer join t_app_package as ap on av.app_id=ap.id
+        left outer join t_user as u on av.publisher_id=u.id
+        where (av.deleted=false and ap.deleted=false and u.deleted=false)
+    </sql>
+    <resultMap id="rm_base" type="com.berrontech.upgrade.commons.entity.AppVersion">
+        <id column="av_id" property="id"/>
+        <result column="av_app_id" property="appId"/>
+        <result column="av_publisher_id" property="publisherId"/>
+        <result column="av_version_code" property="versionCode"/>
+        <result column="av_version_name" property="versionName"/>
+        <result column="av_release_note" property="releaseNote"/>
+        <result column="av_description" property="description"/>
+        <result column="av_filename" property="filename"/>
+        <result column="av_state" property="state"/>
+        <result column="av_create_time" property="createTime"/>
+        <result column="av_update_time" property="updateTime"/>
+        <result column="av_deleted" property="deleted"/>
+    </resultMap>
+    <resultMap id="rm_with_all" type="com.berrontech.upgrade.commons.entity.AppVersion" extends="rm_base">
+        <association property="app" resultMap="com.berrontech.upgrade.repository.mapper.AppPackageMapper.rm_base"/>
+        <association property="publisher" resultMap="com.berrontech.upgrade.repository.mapper.UserMapper.rm_base"/>
+    </resultMap>
+    <select id="selectByAppFetchAll" resultMap="rm_with_all">
+        <include refid="select_with_all"/>
+        and av.app_id=#{appId}
+        order by av.create_time desc
+    </select>
+    <select id="selectByAppAndVersion" resultMap="rm_with_all">
+        <include refid="select_with_all"/>
+        and (av.app_id=#{appId} and (av.version_code=#{versionCode} or av.version_name=#{versionName}))
+    </select>
+</mapper>

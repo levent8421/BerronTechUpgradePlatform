@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.berrontech.upgrade.repository.mapper.AppPackageMapper">
+    <sql id="columns">
+        ap.id          as ap_id,
+        ap.name        as ap_name,
+        ap.dir_name    as ap_dir_name,
+        ap.description as ap_description,
+        ap.creator_id  as ap_creator_id,
+        ap.platform    as ap_platform,
+        ap.create_time as ap_create_time,
+        ap.update_time as ap_update_time,
+        ap.deleted     as ap_deleted
+    </sql>
+    <sql id="select">
+        select
+        <include refid="columns"/>
+        from t_app_package as ap
+        where ap.deleted = false
+    </sql>
+    <resultMap id="rm_base" type="com.berrontech.upgrade.commons.entity.AppPackage">
+        <id column="ap_id" property="id"/>
+        <result column="ap_name" property="name"/>
+        <result column="ap_dir_name" property="dirName"/>
+        <result column="ap_description" property="description"/>
+        <result column="ap_creator_id" property="creatorId"/>
+        <result column="ap_platform" property="platform"/>
+        <result column="ap_create_time" property="createTime"/>
+        <result column="ap_update_time" property="updateTime"/>
+        <result column="ap_deleted" property="deleted"/>
+    </resultMap>
+    <select id="existsByDirName" resultType="integer">
+        select 1
+        from t_app_package as ap
+        where ap.dir_name = #{dirName}
+    </select>
+</mapper>

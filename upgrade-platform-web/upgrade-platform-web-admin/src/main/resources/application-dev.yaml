@@ -2,7 +2,7 @@ server:
   port: 5603
 spring:
   profiles:
-    include: repository-dev,web-dev,service-dev
+    include: repository-dev,web-dev,service-dev,resource-dev
 logging:
   level:
     com.berrontech.upgrade: debug

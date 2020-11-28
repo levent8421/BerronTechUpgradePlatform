@@ -3,6 +3,7 @@ package com.berrontech.upgrade.repository.mapper;
 import com.berrontech.upgrade.commons.entity.User;
 import com.berrontech.upgrade.repository.mybatis.AbstractMapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  * Create By Levent8421
@@ -14,6 +15,7 @@ import org.apache.ibatis.annotations.Param;
  *
  * @author Levent8421
  */
+@Repository
 public interface UserMapper extends AbstractMapper<User> {
     /**
      * Select one user by login name

@@ -3,4 +3,4 @@ spring:
     name: upgrade_web_admin
   profiles:
     active: @activeProfiles@
-    include: repository,web,service
+    include: repository,web,service,resource

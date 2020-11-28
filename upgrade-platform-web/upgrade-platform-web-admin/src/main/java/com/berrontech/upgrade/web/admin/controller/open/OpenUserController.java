@@ -2,6 +2,7 @@ package com.berrontech.upgrade.web.admin.controller.open;
 
 import com.berrontech.upgrade.commons.entity.User;
 import com.berrontech.upgrade.commons.exception.BadRequestException;
+import com.berrontech.upgrade.resource.UserResourceService;
 import com.berrontech.upgrade.service.general.UserService;
 import com.berrontech.upgrade.web.admin.security.UserToken;
 import com.berrontech.upgrade.web.commons.conf.TokenConfiguration;
@@ -27,10 +28,14 @@ import org.springframework.web.bind.annotation.*;
 public class OpenUserController extends AbstractApiController {
     private final UserService userService;
     private final TokenConfiguration tokenConfiguration;
+    private final UserResourceService userResourceService;
 
-    public OpenUserController(UserService userService, TokenConfiguration tokenConfiguration) {
+    public OpenUserController(UserService userService,
+                              TokenConfiguration tokenConfiguration,
+                              UserResourceService userResourceService) {
         this.userService = userService;
         this.tokenConfiguration = tokenConfiguration;
+        this.userResourceService = userResourceService;
     }
 
     /**
@@ -42,6 +47,7 @@ public class OpenUserController extends AbstractApiController {
     @GetMapping("/{id}/_mock-login")
     public GeneralResult<TokenAccountVo<User>> mockLogin(@PathVariable("id") Integer id) {
         final User user = userService.require(id);
+        userResourceService.resolveStaticPath(user);
         final TokenAccountVo<User> vo = buildAccountVo(user);
         return GeneralResult.ok(vo);
     }
@@ -58,6 +64,7 @@ public class OpenUserController extends AbstractApiController {
         ParamChecker.notEmpty(param.getLoginName(), BadRequestException.class, "Login name is required!");
         ParamChecker.notEmpty(param.getPassword(), BadRequestException.class, "Password is required!");
         final User user = userService.login(param.getLoginName(), param.getPassword());
+        userResourceService.resolveStaticPath(user);
         final TokenAccountVo<User> vo = buildAccountVo(user);
         return GeneralResult.ok(vo);
     }

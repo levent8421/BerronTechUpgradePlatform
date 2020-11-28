@@ -39,4 +39,8 @@ public class ResourceConfigurationProperties {
      * 静态资源服务器
      */
     private String server;
+    /**
+     * 用户头像存放目录
+     */
+    private String userAvatarPath = "user/avatar";
 }
