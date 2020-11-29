@@ -57,4 +57,8 @@
         <include refid="select_with_all"/>
         and (av.app_id=#{appId} and (av.version_code=#{versionCode} or av.version_name=#{versionName}))
     </select>
+    <select id="selectByIdFetchAll" resultMap="rm_with_all">
+        <include refid="select_with_all"/>
+        and av.id=#{id}
+    </select>
 </mapper>

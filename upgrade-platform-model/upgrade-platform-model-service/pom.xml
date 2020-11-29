@@ -37,5 +37,10 @@
             <artifactId>upgrade-platform-model-repository</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.berrontech</groupId>
+            <artifactId>upgrade-platform-resource</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

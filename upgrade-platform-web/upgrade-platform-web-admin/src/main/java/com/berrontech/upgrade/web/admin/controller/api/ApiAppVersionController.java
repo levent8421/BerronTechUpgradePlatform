@@ -1,8 +1,11 @@
 package com.berrontech.upgrade.web.admin.controller.api;
 
+import com.berrontech.upgrade.commons.entity.AppPackage;
 import com.berrontech.upgrade.commons.entity.AppVersion;
+import com.berrontech.upgrade.commons.entity.User;
 import com.berrontech.upgrade.commons.exception.BadRequestException;
 import com.berrontech.upgrade.commons.exception.PermissionDeniedException;
+import com.berrontech.upgrade.resource.AppVersionResourceService;
 import com.berrontech.upgrade.service.general.AppVersionService;
 import com.berrontech.upgrade.service.general.UserAppService;
 import com.berrontech.upgrade.web.admin.security.UserTokenUtils;
@@ -11,7 +14,11 @@ import com.berrontech.upgrade.web.commons.security.TokenDataHolder;
 import com.berrontech.upgrade.web.commons.vo.GeneralResult;
 import com.berrontech.upgrade.web.commons.vo.PaginationParam;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Objects;
 
 import static com.berrontech.upgrade.web.commons.util.ParamChecker.notNull;
 
@@ -31,13 +38,16 @@ public class ApiAppVersionController extends AbstractApiController {
     private final AppVersionService appVersionService;
     private final TokenDataHolder tokenDataHolder;
     private final UserAppService userAppService;
+    private final AppVersionResourceService appVersionResourceService;
 
     public ApiAppVersionController(AppVersionService appVersionService,
                                    TokenDataHolder tokenDataHolder,
-                                   UserAppService userAppService) {
+                                   UserAppService userAppService,
+                                   AppVersionResourceService appVersionResourceService) {
         this.appVersionService = appVersionService;
         this.tokenDataHolder = tokenDataHolder;
         this.userAppService = userAppService;
+        this.appVersionResourceService = appVersionResourceService;
     }
 
     /**
@@ -98,7 +108,33 @@ public class ApiAppVersionController extends AbstractApiController {
      */
     @GetMapping("/{id}")
     public GeneralResult<AppVersion> findVersionById(@PathVariable("id") Integer id) {
-        final AppVersion appVersion = appVersionService.require(id);
+        final AppVersion appVersion = appVersionService.requireWithAll(id);
+        final AppPackage app = appVersion.getApp();
+        appVersionResourceService.resolveStaticPath(appVersion, app);
         return GeneralResult.ok(appVersion);
+    }
+
+    /**
+     * 上传版本文件
+     *
+     * @param id   id
+     * @param file file
+     * @return GR
+     */
+    @PostMapping("/{id}/_file")
+    public GeneralResult<AppVersion> uploadAppVersionFile(@PathVariable("id") Integer id,
+                                                          @RequestBody MultipartFile file) {
+        final Integer userId = UserTokenUtils.getUserId(tokenDataHolder);
+        final AppVersion version = appVersionService.requireWithAll(id);
+        if (StringUtils.isNoneBlank(version.getFilename())) {
+            throw new BadRequestException("The version file is read-only!");
+        }
+        final AppPackage app = version.getApp();
+        final User publisher = version.getPublisher();
+        if (!Objects.equals(userId, publisher.getId())) {
+            throw new PermissionDeniedException("Only the publisher of this version can upload files");
+        }
+        final AppVersion res = appVersionService.saveFile(file, version, app);
+        return GeneralResult.ok(res);
     }
 }

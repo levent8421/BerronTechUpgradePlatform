@@ -43,4 +43,8 @@ public class ResourceConfigurationProperties {
      * 用户头像存放目录
      */
     private String userAvatarPath = "user/avatar";
+    /**
+     * 版本文件保存目录
+     */
+    private String appFilePath = "versions";
 }
