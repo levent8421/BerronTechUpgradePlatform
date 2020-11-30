@@ -45,4 +45,20 @@ public interface UserAppMapper extends AbstractMapper<UserApp> {
      */
     Integer selectRoleByUserAndApp(@Param("userId") Integer userId,
                                    @Param("appId") Integer appId);
+
+    /**
+     * Select Binders by app
+     *
+     * @param appId appId
+     * @return Binders
+     */
+    List<UserApp> selectByApp(@Param("appId") Integer appId);
+
+    /**
+     * select User app by id
+     *
+     * @param id id
+     * @return ua binder
+     */
+    UserApp selectByIdFetchApp(@Param("id") Integer id);
 }

@@ -32,4 +32,14 @@
         and u.login_name=#{loginName}
         limit 1
     </select>
+    <select id="selectByNameLike" resultMap="rm_base">
+        <include refid="select"/>
+        and u.name like #{query}
+        limit #{maxRows}
+    </select>
+    <update id="updatePassword">
+        update t_user as u
+        set password=#{password}
+        where id = #{id}
+    </update>
 </mapper>

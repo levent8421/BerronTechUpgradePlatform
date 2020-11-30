@@ -23,6 +23,13 @@
         from t_user_app as ua left outer join t_app_package as ap on ua.app_id=ap.id where (ua.deleted=false and
         ap.deleted=false)
     </sql>
+    <sql id="select_with_user">
+        select
+        <include refid="columns"/>,
+        <include refid="com.berrontech.upgrade.repository.mapper.UserMapper.columns"/>
+        from t_user_app as ua left outer join t_user as u on ua.user_id=u.id where (ua.deleted=false and
+        u.deleted=false)
+    </sql>
     <resultMap id="rm_base" type="com.berrontech.upgrade.commons.entity.UserApp">
         <id column="ua_id" property="id"/>
         <result column="ua_user_id" property="userId"/>
@@ -34,6 +41,9 @@
     </resultMap>
     <resultMap id="rm_with_app" type="com.berrontech.upgrade.commons.entity.UserApp" extends="rm_base">
         <association property="app" resultMap="com.berrontech.upgrade.repository.mapper.AppPackageMapper.rm_base"/>
+    </resultMap>
+    <resultMap id="rm_with_user" type="com.berrontech.upgrade.commons.entity.UserApp" extends="rm_base">
+        <association property="user" resultMap="com.berrontech.upgrade.repository.mapper.UserMapper.rm_base"/>
     </resultMap>
     <select id="selectByUserAndApp" resultMap="rm_base">
         <include refid="select"/>
@@ -50,5 +60,13 @@
         where ua.deleted = false
           and ua.user_id = #{userId}
           and ua.app_id = #{appId}
+    </select>
+    <select id="selectByApp" resultMap="rm_with_user">
+        <include refid="select_with_user"/>
+        and (ua.app_id=#{appId})
+    </select>
+    <select id="selectByIdFetchApp" resultMap="rm_with_app">
+        <include refid="select_with_app"/>
+        and (ua.id=#{id})
     </select>
 </mapper>

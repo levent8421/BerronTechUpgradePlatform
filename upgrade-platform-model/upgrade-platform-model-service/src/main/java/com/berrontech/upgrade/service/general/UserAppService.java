@@ -4,6 +4,8 @@ import com.berrontech.upgrade.commons.entity.UserApp;
 import com.berrontech.upgrade.service.basic.AbstractService;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * Create By Levent8421
  * Create Time: 2020/11/28 13:50
@@ -61,4 +63,20 @@ public interface UserAppService extends AbstractService<UserApp> {
      * @return role or null
      */
     Integer getRole(Integer userId, Integer appId);
+
+    /**
+     * Find binder by appId
+     *
+     * @param appId appId
+     * @return appS
+     */
+    List<UserApp> findByApp(Integer appId);
+
+    /**
+     * Find a binder by id fetch app
+     *
+     * @param id id
+     * @return ua
+     */
+    UserApp requireWithApp(Integer id);
 }

@@ -115,6 +115,36 @@ public class ApiAppVersionController extends AbstractApiController {
     }
 
     /**
+     * 更新版本信息
+     *
+     * @param id    id
+     * @param param param
+     * @return GR
+     */
+    @PostMapping("/{id}")
+    public GeneralResult<AppVersion> updateVersionInfo(@PathVariable("id") Integer id,
+                                                       @RequestBody AppVersion param) {
+        final AppVersion version = appVersionService.require(id);
+        final Integer userId = UserTokenUtils.getUserId(tokenDataHolder);
+        if (!Objects.equals(version.getPublisherId(), userId)) {
+            throw new PermissionDeniedException("您暂无权限操作该版本！");
+        }
+        copyUpdateParam(param, version);
+        final AppVersion res = appVersionService.updateById(version);
+        return GeneralResult.ok(res);
+    }
+
+    private void copyUpdateParam(AppVersion param, AppVersion version) {
+        final Class<BadRequestException> e = BadRequestException.class;
+        notNull(param, e, "No params sent!");
+        notNull(param.getState(), e, "State is required!");
+
+        version.setState(param.getState());
+        version.setDescription(param.getDescription());
+        version.setReleaseNote(param.getReleaseNote());
+    }
+
+    /**
      * 上传版本文件
      *
      * @param id   id

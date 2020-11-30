@@ -1,12 +1,15 @@
 package com.berrontech.upgrade.service.general.impl;
 
 import com.berrontech.upgrade.commons.entity.UserApp;
+import com.berrontech.upgrade.commons.exception.ResourceNotFoundException;
 import com.berrontech.upgrade.repository.mapper.UserAppMapper;
 import com.berrontech.upgrade.service.basic.impl.AbstractServiceImpl;
 import com.berrontech.upgrade.service.general.UserAppService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Create By Levent8421
@@ -60,5 +63,19 @@ public class UserAppServiceImpl extends AbstractServiceImpl<UserApp> implements 
     @Override
     public Integer getRole(Integer userId, Integer appId) {
         return userAppMapper.selectRoleByUserAndApp(userId, appId);
+    }
+
+    @Override
+    public List<UserApp> findByApp(Integer appId) {
+        return userAppMapper.selectByApp(appId);
+    }
+
+    @Override
+    public UserApp requireWithApp(Integer id) {
+        final UserApp binder = userAppMapper.selectByIdFetchApp(id);
+        if (binder == null) {
+            throw new ResourceNotFoundException("Can not find UserAppBinder by id " + id);
+        }
+        return binder;
     }
 }
