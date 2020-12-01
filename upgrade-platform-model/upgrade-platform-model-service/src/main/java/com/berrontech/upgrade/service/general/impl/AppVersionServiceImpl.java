@@ -74,7 +74,7 @@ public class AppVersionServiceImpl extends AbstractServiceImpl<AppVersion> imple
     }
 
     @Override
-    public AppVersion findLastVersion(Integer appId) {
-        return appVersionMapper.selectLastVersionByApp(appId);
+    public AppVersion findLastVersion(Integer appId, Integer state) {
+        return appVersionMapper.selectLastVersionByApp(appId, state);
     }
 }

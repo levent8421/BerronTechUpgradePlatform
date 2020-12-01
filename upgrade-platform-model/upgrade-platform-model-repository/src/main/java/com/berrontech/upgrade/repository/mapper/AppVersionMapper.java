@@ -51,7 +51,9 @@ public interface AppVersionMapper extends AbstractMapper<AppVersion> {
      * Select Last version by appId
      *
      * @param appId appId
+     * @param state state
      * @return version
      */
-    AppVersion selectLastVersionByApp(@Param("appId") Integer appId);
+    AppVersion selectLastVersionByApp(@Param("appId") Integer appId,
+                                      @Param("state") Integer state);
 }

@@ -67,7 +67,8 @@ public interface AppVersionService extends AbstractService<AppVersion> {
      * Find last version by appId
      *
      * @param appId appId
+     * @param state state
      * @return version
      */
-    AppVersion findLastVersion(Integer appId);
+    AppVersion findLastVersion(Integer appId, Integer state);
 }

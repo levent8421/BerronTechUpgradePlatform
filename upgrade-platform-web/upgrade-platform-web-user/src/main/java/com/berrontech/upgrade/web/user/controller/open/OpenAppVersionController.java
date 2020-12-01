@@ -3,6 +3,7 @@ package com.berrontech.upgrade.web.user.controller.open;
 import com.berrontech.upgrade.commons.entity.AppPackage;
 import com.berrontech.upgrade.commons.entity.AppVersion;
 import com.berrontech.upgrade.commons.exception.BadRequestException;
+import com.berrontech.upgrade.commons.exception.InternalServerErrorException;
 import com.berrontech.upgrade.resource.AppVersionResourceService;
 import com.berrontech.upgrade.service.general.AppPackageService;
 import com.berrontech.upgrade.service.general.AppVersionService;
@@ -55,7 +56,10 @@ public class OpenAppVersionController extends AbstractApiController {
         } else {
             throw new BadRequestException("appId or appKey is required!");
         }
-        final AppVersion version = appVersionService.findLastVersion(app.getId());
+        final AppVersion version = appVersionService.findLastVersion(app.getId(), AppVersion.STATE_AVAILABLE);
+        if(version == null){
+            throw new InternalServerErrorException("暂无新版本发布");
+        }
         version.setApp(app);
         appVersionResourceService.resolveStaticPath(version, app);
         return GeneralResult.ok(version);
