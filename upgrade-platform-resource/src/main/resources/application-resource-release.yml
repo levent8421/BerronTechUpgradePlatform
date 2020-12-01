@@ -1,3 +1,3 @@
 static:
-  root-path: /var/www/upgrade-static.berrontech.com
-  server: http://upgrade-static.berrontech.com
+  root-path: /var/www/app-static.berrontech.com
+  server: http://app-static.berrontech.com
