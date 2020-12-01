@@ -34,4 +34,8 @@
         from t_app_package as ap
         where ap.dir_name = #{dirName}
     </select>
+    <select id="selectByDirName" resultMap="rm_base">
+        <include refid="select"/>
+        and (ap.dir_name=#{dirName})
+    </select>
 </mapper>

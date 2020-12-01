@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: upgrade_web_user
+  profiles:
+    active: @activeProfiles@
+    include: repository,web,service,resource

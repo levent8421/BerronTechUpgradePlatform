@@ -61,4 +61,10 @@
         <include refid="select_with_all"/>
         and av.id=#{id}
     </select>
+    <select id="selectLastVersionByApp" resultMap="rm_base">
+        <include refid="select"/>
+        and (av.app_id=#{appId})
+        order by av.version_code desc
+        limit 1
+    </select>
 </mapper>

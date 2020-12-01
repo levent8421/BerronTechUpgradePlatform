@@ -24,4 +24,12 @@ public interface AppPackageMapper extends AbstractMapper<AppPackage> {
      * @return 1 or null
      */
     Integer existsByDirName(@Param("dirName") String dirName);
+
+    /**
+     * Find app by app dirName
+     *
+     * @param dirName dirName
+     * @return app
+     */
+    AppPackage selectByDirName(@Param("dirName") String dirName);
 }

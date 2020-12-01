@@ -29,4 +29,12 @@ public interface AppPackageService extends AbstractService<AppPackage> {
      * @return bool
      */
     boolean existByDirName(String dirName);
+
+    /**
+     * Find app by key
+     *
+     * @param appKey app key
+     * @return app
+     */
+    AppPackage requireByKey(String appKey);
 }

@@ -2,6 +2,7 @@ package com.berrontech.upgrade.service.general.impl;
 
 import com.berrontech.upgrade.commons.entity.AppPackage;
 import com.berrontech.upgrade.commons.exception.BadRequestException;
+import com.berrontech.upgrade.commons.exception.ResourceNotFoundException;
 import com.berrontech.upgrade.repository.mapper.AppPackageMapper;
 import com.berrontech.upgrade.service.basic.impl.AbstractServiceImpl;
 import com.berrontech.upgrade.service.general.AppPackageService;
@@ -38,5 +39,18 @@ public class AppPackageServiceImpl extends AbstractServiceImpl<AppPackage> imple
     public boolean existByDirName(String dirName) {
         final Integer existsFlag = appPackageMapper.existsByDirName(dirName);
         return existsFlag != null;
+    }
+
+    private AppPackage findByDirName(String dirName) {
+        return appPackageMapper.selectByDirName(dirName);
+    }
+
+    @Override
+    public AppPackage requireByKey(String appKey) {
+        final AppPackage app = findByDirName(appKey);
+        if (app == null) {
+            throw new ResourceNotFoundException("Can not find app by dirName " + appKey);
+        }
+        return app;
     }
 }

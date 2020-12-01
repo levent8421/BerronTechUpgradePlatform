@@ -72,4 +72,9 @@ public class AppVersionServiceImpl extends AbstractServiceImpl<AppVersion> imple
         version.setFilename(filename);
         return updateById(version);
     }
+
+    @Override
+    public AppVersion findLastVersion(Integer appId) {
+        return appVersionMapper.selectLastVersionByApp(appId);
+    }
 }

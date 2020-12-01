@@ -62,4 +62,12 @@ public interface AppVersionService extends AbstractService<AppVersion> {
      * @return app version entity
      */
     AppVersion saveFile(MultipartFile file, AppVersion version, AppPackage app);
+
+    /**
+     * Find last version by appId
+     *
+     * @param appId appId
+     * @return version
+     */
+    AppVersion findLastVersion(Integer appId);
 }

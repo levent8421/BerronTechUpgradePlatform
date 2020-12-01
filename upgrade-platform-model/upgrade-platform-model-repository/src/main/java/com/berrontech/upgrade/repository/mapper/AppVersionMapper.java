@@ -46,4 +46,12 @@ public interface AppVersionMapper extends AbstractMapper<AppVersion> {
      * @return version
      */
     AppVersion selectByIdFetchAll(@Param("id") Integer id);
+
+    /**
+     * Select Last version by appId
+     *
+     * @param appId appId
+     * @return version
+     */
+    AppVersion selectLastVersionByApp(@Param("appId") Integer appId);
 }

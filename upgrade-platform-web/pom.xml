@@ -12,6 +12,7 @@
     <modules>
         <module>upgrade-platform-web-admin</module>
         <module>upgrade-platform-web-commons</module>
+        <module>upgrade-platform-web-user</module>
     </modules>
     <artifactId>upgrade-platform-web</artifactId>
     <description>Upgrade Platform web</description>
