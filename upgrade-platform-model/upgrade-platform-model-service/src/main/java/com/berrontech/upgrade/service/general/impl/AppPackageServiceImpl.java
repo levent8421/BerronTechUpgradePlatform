@@ -6,6 +6,8 @@ import com.berrontech.upgrade.commons.exception.ResourceNotFoundException;
 import com.berrontech.upgrade.repository.mapper.AppPackageMapper;
 import com.berrontech.upgrade.service.basic.impl.AbstractServiceImpl;
 import com.berrontech.upgrade.service.general.AppPackageService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,5 +54,11 @@ public class AppPackageServiceImpl extends AbstractServiceImpl<AppPackage> imple
             throw new ResourceNotFoundException("Can not find app by dirName " + appKey);
         }
         return app;
+    }
+
+    @Override
+    public PageInfo<AppPackage> listWithOrder(int page, int rows) {
+        return PageHelper.startPage(page, rows)
+                .doSelectPageInfo(appPackageMapper::selectOrderByTime);
     }
 }

@@ -2,6 +2,7 @@ package com.berrontech.upgrade.service.general;
 
 import com.berrontech.upgrade.commons.entity.AppPackage;
 import com.berrontech.upgrade.service.basic.AbstractService;
+import com.github.pagehelper.PageInfo;
 
 /**
  * Create By Levent8421
@@ -37,4 +38,13 @@ public interface AppPackageService extends AbstractService<AppPackage> {
      * @return app
      */
     AppPackage requireByKey(String appKey);
+
+    /**
+     * List order by create time
+     *
+     * @param page page
+     * @param rows rows
+     * @return pageInfo
+     */
+    PageInfo<AppPackage> listWithOrder(int page, int rows);
 }

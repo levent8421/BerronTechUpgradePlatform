@@ -5,6 +5,8 @@ import com.berrontech.upgrade.repository.mybatis.AbstractMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Create By Levent8421
  * Create Time: 2020/11/28 11:41
@@ -32,4 +34,11 @@ public interface AppPackageMapper extends AbstractMapper<AppPackage> {
      * @return app
      */
     AppPackage selectByDirName(@Param("dirName") String dirName);
+
+    /**
+     * Select app order by create time desc
+     *
+     * @return app list
+     */
+    List<AppPackage> selectOrderByTime();
 }

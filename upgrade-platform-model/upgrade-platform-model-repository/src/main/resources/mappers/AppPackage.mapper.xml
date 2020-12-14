@@ -38,4 +38,8 @@
         <include refid="select"/>
         and (ap.dir_name=#{dirName})
     </select>
+    <select id="selectOrderByTime" resultMap="rm_base">
+        <include refid="select"/>
+        order by ap.create_time desc
+    </select>
 </mapper>
